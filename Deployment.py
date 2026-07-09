@@ -40,9 +40,6 @@ Variables utilizadas:
 • Distrito
 • Mes
 • Año
-• Población
-• Número de bodegas
-• Patrullajes policiales
 
 Tecnologías:
 
@@ -106,15 +103,6 @@ with st.form("formulario_prediccion"):
         )
 
 
-        poblacion = st.slider(
-            "Población",
-            min_value=10000,
-            max_value=2000000,
-            value=598000,
-            step=10000
-        )
-
-
     with columna2:
 
         mes = st.selectbox(
@@ -134,25 +122,6 @@ with st.form("formulario_prediccion"):
                 "Diciembre"
             ]
         )
-
-
-        bodegas = st.slider(
-            "Número de bodegas",
-            min_value=100,
-            max_value=20000,
-            value=5200,
-            step=100
-        )
-
-
-        patrullajes = st.slider(
-            "Patrullajes policiales",
-            min_value=0,
-            max_value=200,
-            value=40,
-            step=5
-        )
-
 
     boton = st.form_submit_button(
         "🔍 Realizar Predicción"
@@ -220,12 +189,6 @@ if boton:
         "Mes":[mes_numero],
 
         "Año":[anio],
-
-        "Población":[poblacion],
-
-        "Num_bodegas":[bodegas],
-
-        "Patrullajes":[patrullajes],
 
         "Distrito_Cercado de Lima":[distrito_cercado],
 
