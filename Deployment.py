@@ -190,7 +190,6 @@ if boton:
 
     # ==========================
     # DATOS PARA EL MODELO
-    # (NO ELIMINAR ESTAS COLUMNAS)
     # ==========================
 
     datos = pd.DataFrame({
@@ -230,22 +229,30 @@ if boton:
     st.subheader("📈 Resultado")
 
 
-    col1, col2 = st.columns(2)
+    col1, col2, col3 = st.columns(3)
 
 
     with col1:
-
+    
         st.metric(
             "Extorsiones estimadas",
             f"{valor:.0f}"
         )
-
-
+    
+    
     with col2:
-
+    
         st.metric(
             "Distrito",
             distrito
+        )
+    
+    
+    with col3:
+    
+        st.metric(
+            "Año",
+            anio
         )
 
 
