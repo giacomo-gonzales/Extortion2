@@ -31,9 +31,12 @@ st.sidebar.info(
 """
 Sistema Inteligente de Predicción de Extorsiones.
 
-Modelo de Machine Learning encargado de
-estimar la cantidad de extorsiones según
-el distrito, mes y año.
+Modelo de Machine Learning que estima
+la cantidad de extorsiones según:
+
+• Distrito
+• Mes
+• Año
 
 Tecnologías:
 
@@ -53,9 +56,9 @@ st.title("🚔 Sistema Inteligente de Predicción de Extorsiones")
 
 st.write(
 """
-Esta aplicación utiliza Machine Learning para
-predecir la cantidad estimada de extorsiones
-según la información ingresada.
+Aplicación de Inteligencia Artificial que utiliza
+Machine Learning para estimar la cantidad de
+extorsiones en un distrito determinado.
 """
 )
 
@@ -69,12 +72,12 @@ st.divider()
 st.subheader("📊 Datos de Entrada")
 
 
-with st.form("formulario"):
+with st.form("formulario_prediccion"):
 
-    col1, col2 = st.columns(2)
+    columna1, columna2 = st.columns(2)
 
 
-    with col1:
+    with columna1:
 
         distrito = st.selectbox(
             "Distrito",
@@ -96,7 +99,7 @@ with st.form("formulario"):
         )
 
 
-    with col2:
+    with columna2:
 
         mes = st.selectbox(
             "Mes",
@@ -129,6 +132,8 @@ with st.form("formulario"):
 if boton:
 
 
+    # Convertir mes a número
+
     meses = {
         "Enero":1,
         "Febrero":2,
@@ -158,29 +163,47 @@ if boton:
 
 
     if distrito == "Comas":
+
         comas = 1
 
+
     elif distrito == "Cercado de Lima":
+
         cercado = 1
 
+
     elif distrito == "SJL":
+
         sjl = 1
 
+
     elif distrito == "Miraflores":
+
         miraflores = 1
 
+
     elif distrito == "San Borja":
+
         sanborja = 1
 
 
 
-    # Datos enviados al modelo
+    # ==========================
+    # DATOS PARA EL MODELO
+    # (NO ELIMINAR ESTAS COLUMNAS)
+    # ==========================
 
     datos = pd.DataFrame({
 
         "Mes":[mes_numero],
 
         "Año":[anio],
+
+        "Población":[598000],
+
+        "Num_bodegas":[5200],
+
+        "Patrullajes":[40],
 
         "Distrito_Cercado de Lima":[cercado],
 
