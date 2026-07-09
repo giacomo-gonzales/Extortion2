@@ -3,85 +3,90 @@ import pandas as pd
 import joblib
 
 
-# =========================
+# ==========================
 # CONFIGURACIÓN DE LA PÁGINA
-# =========================
+# ==========================
 
 st.set_page_config(
-    page_title="Extortion Prediction AI",
+    page_title="Predicción de Extorsiones",
     page_icon="🚔",
     layout="wide"
 )
 
 
-# =========================
+# ==========================
 # CARGAR MODELO
-# =========================
+# ==========================
 
 modelo = joblib.load("modelo_extorsiones.pkl")
 
 
-# =========================
-# SIDEBAR
-# =========================
+# ==========================
+# BARRA LATERAL
+# ==========================
 
-st.sidebar.title("🚔 About the Project")
+st.sidebar.title("🚔 Sobre el Proyecto")
 
 st.sidebar.info(
 """
-## Intelligent Extortion Prediction System
+Sistema Inteligente de Predicción de Extorsiones.
 
-This application uses a Machine Learning model
-to estimate the number of extortion incidents.
+Este proyecto utiliza Machine Learning
+para estimar la cantidad de extorsiones
+según diferentes características del distrito.
 
-Input variables:
+Variables utilizadas:
 
-• District
-• Month
-• Year
-• Population
-• Number of stores
-• Police patrols
+• Distrito
+• Mes
+• Año
+• Población
+• Número de bodegas
+• Patrullajes policiales
 
-Developed with:
-Python + Scikit-Learn + Streamlit
+Tecnologías:
+
+• Python
+• Scikit-Learn
+• Pandas
+• Streamlit
 """
 )
 
 
-# =========================
-# TÍTULO PRINCIPAL
-# =========================
+# ==========================
+# TÍTULO
+# ==========================
 
-st.title("🚔 Intelligent Extortion Prediction System")
+st.title("🚔 Sistema Inteligente de Predicción de Extorsiones")
 
-st.markdown(
+st.write(
 """
-This system predicts the estimated number of extortion
-incidents using a Machine Learning model trained with
-historical crime data.
+Aplicación basada en Machine Learning para estimar
+la cantidad de extorsiones y determinar el nivel
+de riesgo según las características ingresadas.
 """
 )
 
 st.divider()
 
 
-# =========================
-# FORMULARIO
-# =========================
+# ==========================
+# FORMULARIO DE DATOS
+# ==========================
 
-st.subheader("📊 Input Information")
-
-
-with st.form("prediction_form"):
-
-    col1, col2 = st.columns(2)
+st.subheader("📊 Datos de Entrada")
 
 
-    with col1:
+with st.form("formulario_prediccion"):
+
+    columna1, columna2 = st.columns(2)
+
+
+    with columna1:
 
         distrito = st.selectbox(
-            "District",
+            "Distrito",
             [
                 "Comas",
                 "Cercado de Lima",
@@ -92,118 +97,127 @@ with st.form("prediction_form"):
         )
 
 
-        anio = st.number_input(
-            "Year",
+        anio = st.slider(
+            "Año",
             min_value=2020,
             max_value=2030,
-            value=2026
+            value=2026,
+            step=1
         )
 
 
-        poblacion = st.number_input(
-            "Population",
-            value=598000
+        poblacion = st.slider(
+            "Población",
+            min_value=10000,
+            max_value=2000000,
+            value=598000,
+            step=10000
         )
 
 
-    with col2:
+    with columna2:
 
         mes = st.selectbox(
-            "Month",
+            "Mes",
             [
-                "January",
-                "February",
-                "March",
-                "April",
-                "May",
-                "June",
-                "July",
-                "August",
-                "September",
-                "October",
-                "November",
-                "December"
+                "Enero",
+                "Febrero",
+                "Marzo",
+                "Abril",
+                "Mayo",
+                "Junio",
+                "Julio",
+                "Agosto",
+                "Septiembre",
+                "Octubre",
+                "Noviembre",
+                "Diciembre"
             ]
         )
 
 
-        bodegas = st.number_input(
-            "Number of stores",
-            value=5200
+        bodegas = st.slider(
+            "Número de bodegas",
+            min_value=100,
+            max_value=20000,
+            value=5200,
+            step=100
         )
 
 
-        patrullajes = st.number_input(
-            "Police patrols",
-            value=40
+        patrullajes = st.slider(
+            "Patrullajes policiales",
+            min_value=0,
+            max_value=200,
+            value=40,
+            step=5
         )
 
 
     boton = st.form_submit_button(
-        "🔍 Predict Extortion Risk"
+        "🔍 Realizar Predicción"
     )
 
 
-
-# =========================
+# ==========================
 # PREDICCIÓN
-# =========================
+# ==========================
 
 if boton:
 
 
-    # Conversión del mes a número
+    # Conversión del mes
 
     meses = {
-        "January":1,
-        "February":2,
-        "March":3,
-        "April":4,
-        "May":5,
-        "June":6,
-        "July":7,
-        "August":8,
-        "September":9,
-        "October":10,
-        "November":11,
-        "December":12
+        "Enero":1,
+        "Febrero":2,
+        "Marzo":3,
+        "Abril":4,
+        "Mayo":5,
+        "Junio":6,
+        "Julio":7,
+        "Agosto":8,
+        "Septiembre":9,
+        "Octubre":10,
+        "Noviembre":11,
+        "Diciembre":12
     }
 
 
-    mes_num = meses[mes]
+    mes_numero = meses[mes]
 
 
-    # One-Hot Encoding del distrito
+    # Codificación del distrito
 
-    cercado = 0
-    comas = 0
-    miraflores = 0
-    sjl = 0
-    sanborja = 0
+    distrito_cercado = 0
+    distrito_comas = 0
+    distrito_miraflores = 0
+    distrito_sjl = 0
+    distrito_sanborja = 0
 
 
     if distrito == "Comas":
-        comas = 1
+        distrito_comas = 1
 
     elif distrito == "Cercado de Lima":
-        cercado = 1
+        distrito_cercado = 1
 
     elif distrito == "SJL":
-        sjl = 1
+        distrito_sjl = 1
 
     elif distrito == "Miraflores":
-        miraflores = 1
+        distrito_miraflores = 1
 
     elif distrito == "San Borja":
-        sanborja = 1
+        distrito_sanborja = 1
 
 
 
-    # Crear dataframe igual al entrenamiento
+    # Crear datos para el modelo
 
-    nuevo = pd.DataFrame({
+    datos_nuevos = pd.DataFrame({
 
-        "Mes":[mes_num],
+        "Mes":[mes_numero],
 
         "Año":[anio],
 
@@ -213,34 +227,30 @@ if boton:
 
         "Patrullajes":[patrullajes],
 
-        "Distrito_Cercado de Lima":[cercado],
+        "Distrito_Cercado de Lima":[distrito_cercado],
 
-        "Distrito_Comas":[comas],
+        "Distrito_Comas":[distrito_comas],
 
-        "Distrito_Miraflores":[miraflores],
+        "Distrito_Miraflores":[distrito_miraflores],
 
-        "Distrito_SJL":[sjl],
+        "Distrito_SJL":[distrito_sjl],
 
-        "Distrito_San Borja":[sanborja]
+        "Distrito_San Borja":[distrito_sanborja]
 
     })
 
 
-
     # Predicción
 
-    prediccion = modelo.predict(nuevo)
+    resultado = modelo.predict(datos_nuevos)
 
-    valor = prediccion[0]
-
+    cantidad_extorsiones = resultado[0]
 
 
     st.divider()
 
-    st.subheader("📈 Prediction Results")
+    st.subheader("📈 Resultado de la Predicción")
 
-
-    # Métricas
 
     col1, col2, col3 = st.columns(3)
 
@@ -248,15 +258,15 @@ if boton:
     with col1:
 
         st.metric(
-            "Estimated Extortions",
-            f"{valor:.0f}"
+            "Extorsiones estimadas",
+            f"{cantidad_extorsiones:.0f}"
         )
 
 
     with col2:
 
         st.metric(
-            "District",
+            "Distrito",
             distrito
         )
 
@@ -264,10 +274,9 @@ if boton:
     with col3:
 
         st.metric(
-            "Year",
+            "Año",
             anio
         )
-
 
 
     st.divider()
@@ -275,46 +284,44 @@ if boton:
 
     # Nivel de riesgo
 
-    st.subheader("🚦 Risk Level")
+    st.subheader("🚦 Nivel de Riesgo")
 
 
-    if valor <= 5:
+    if cantidad_extorsiones <= 5:
 
         st.success(
-            "🟢 LOW RISK"
+            "🟢 RIESGO BAJO"
         )
 
 
-    elif valor <= 12:
+    elif cantidad_extorsiones <= 12:
 
         st.warning(
-            "🟡 MEDIUM RISK"
+            "🟡 RIESGO MEDIO"
         )
 
 
-    elif valor <= 18:
+    elif cantidad_extorsiones <= 18:
 
         st.warning(
-            "🟠 HIGH RISK"
+            "🟠 RIESGO ALTO"
         )
 
 
     else:
 
         st.error(
-            "🔴 VERY HIGH RISK"
+            "🔴 RIESGO MUY ALTO"
         )
 
 
 
-# =========================
-# FOOTER
-# =========================
+# ==========================
+# PIE DE PÁGINA
+# ==========================
 
 st.divider()
 
 st.caption(
-"""
-Artificial Intelligence Project | Machine Learning Deployment | 2026
-"""
+"Proyecto de Inteligencia Artificial | Machine Learning Deployment | 2026"
 )
