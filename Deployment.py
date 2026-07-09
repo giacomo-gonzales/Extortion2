@@ -4,7 +4,7 @@ import joblib
 
 
 # ==========================
-# CONFIGURACIÓN DE LA PÁGINA
+# CONFIGURACIÓN
 # ==========================
 
 st.set_page_config(
@@ -22,7 +22,7 @@ modelo = joblib.load("modelo_extorsiones.pkl")
 
 
 # ==========================
-# BARRA LATERAL
+# SIDEBAR
 # ==========================
 
 st.sidebar.title("🚔 Sobre el Proyecto")
@@ -31,15 +31,9 @@ st.sidebar.info(
 """
 Sistema Inteligente de Predicción de Extorsiones.
 
-Este proyecto utiliza Machine Learning
-para estimar la cantidad de extorsiones
-según diferentes características del distrito.
-
-Variables utilizadas:
-
-• Distrito
-• Mes
-• Año
+Modelo de Machine Learning encargado de
+estimar la cantidad de extorsiones según
+el distrito, mes y año.
 
 Tecnologías:
 
@@ -59,9 +53,9 @@ st.title("🚔 Sistema Inteligente de Predicción de Extorsiones")
 
 st.write(
 """
-Aplicación basada en Machine Learning para estimar
-la cantidad de extorsiones y determinar el nivel
-de riesgo según las características ingresadas.
+Esta aplicación utiliza Machine Learning para
+predecir la cantidad estimada de extorsiones
+según la información ingresada.
 """
 )
 
@@ -69,18 +63,18 @@ st.divider()
 
 
 # ==========================
-# FORMULARIO DE DATOS
+# ENTRADAS
 # ==========================
 
 st.subheader("📊 Datos de Entrada")
 
 
-with st.form("formulario_prediccion"):
+with st.form("formulario"):
 
-    columna1, columna2 = st.columns(2)
+    col1, col2 = st.columns(2)
 
 
-    with columna1:
+    with col1:
 
         distrito = st.selectbox(
             "Distrito",
@@ -96,14 +90,13 @@ with st.form("formulario_prediccion"):
 
         anio = st.slider(
             "Año",
-            min_value=2020,
-            max_value=2030,
-            value=2026,
-            step=1
+            2020,
+            2030,
+            2026
         )
 
 
-    with columna2:
+    with col2:
 
         mes = st.selectbox(
             "Mes",
@@ -123,6 +116,7 @@ with st.form("formulario_prediccion"):
             ]
         )
 
+
     boton = st.form_submit_button(
         "🔍 Realizar Predicción"
     )
@@ -134,8 +128,6 @@ with st.form("formulario_prediccion"):
 
 if boton:
 
-
-    # Conversión del mes
 
     meses = {
         "Enero":1,
@@ -158,71 +150,71 @@ if boton:
 
     # Codificación del distrito
 
-    distrito_cercado = 0
-    distrito_comas = 0
-    distrito_miraflores = 0
-    distrito_sjl = 0
-    distrito_sanborja = 0
+    cercado = 0
+    comas = 0
+    miraflores = 0
+    sjl = 0
+    sanborja = 0
 
 
     if distrito == "Comas":
-        distrito_comas = 1
+        comas = 1
 
     elif distrito == "Cercado de Lima":
-        distrito_cercado = 1
+        cercado = 1
 
     elif distrito == "SJL":
-        distrito_sjl = 1
+        sjl = 1
 
     elif distrito == "Miraflores":
-        distrito_miraflores = 1
+        miraflores = 1
 
     elif distrito == "San Borja":
-        distrito_sanborja = 1
+        sanborja = 1
 
 
 
-    # Crear datos para el modelo
+    # Datos enviados al modelo
 
-    datos_nuevos = pd.DataFrame({
+    datos = pd.DataFrame({
 
         "Mes":[mes_numero],
 
         "Año":[anio],
 
-        "Distrito_Cercado de Lima":[distrito_cercado],
+        "Distrito_Cercado de Lima":[cercado],
 
-        "Distrito_Comas":[distrito_comas],
+        "Distrito_Comas":[comas],
 
-        "Distrito_Miraflores":[distrito_miraflores],
+        "Distrito_Miraflores":[miraflores],
 
-        "Distrito_SJL":[distrito_sjl],
+        "Distrito_SJL":[sjl],
 
-        "Distrito_San Borja":[distrito_sanborja]
+        "Distrito_San Borja":[sanborja]
 
     })
 
 
     # Predicción
 
-    resultado = modelo.predict(datos_nuevos)
+    resultado = modelo.predict(datos)
 
-    cantidad_extorsiones = resultado[0]
+    valor = resultado[0]
 
 
     st.divider()
 
-    st.subheader("📈 Resultado de la Predicción")
+    st.subheader("📈 Resultado")
 
 
-    col1, col2, col3 = st.columns(3)
+    col1, col2 = st.columns(2)
 
 
     with col1:
 
         st.metric(
             "Extorsiones estimadas",
-            f"{cantidad_extorsiones:.0f}"
+            f"{valor:.0f}"
         )
 
 
@@ -234,37 +226,27 @@ if boton:
         )
 
 
-    with col3:
-
-        st.metric(
-            "Año",
-            anio
-        )
-
-
     st.divider()
 
-
-    # Nivel de riesgo
 
     st.subheader("🚦 Nivel de Riesgo")
 
 
-    if cantidad_extorsiones <= 5:
+    if valor <= 5:
 
         st.success(
             "🟢 RIESGO BAJO"
         )
 
 
-    elif cantidad_extorsiones <= 12:
+    elif valor <= 12:
 
         st.warning(
             "🟡 RIESGO MEDIO"
         )
 
 
-    elif cantidad_extorsiones <= 18:
+    elif valor <= 18:
 
         st.warning(
             "🟠 RIESGO ALTO"
@@ -278,13 +260,12 @@ if boton:
         )
 
 
-
 # ==========================
-# PIE DE PÁGINA
+# PIE
 # ==========================
 
 st.divider()
 
 st.caption(
-"Proyecto de Inteligencia Artificial | Machine Learning Deployment | 2026"
+"Proyecto de Inteligencia Artificial | Despliegue de Modelo Machine Learning"
 )
